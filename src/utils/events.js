@@ -955,22 +955,11 @@ const defaultContextMenu = function(worksheet, x, y, role) {
         }
     }
 
-    // Save
-    if (worksheet.parent.config.allowExport != false) {
-        items.push({
-            title: jSuites.translate('Save as') + '...',
-            shortcut: 'Ctrl + S',
-            onclick: function () {
-                worksheet.download();
-            }
-        });
-    }
-
     // Add Rename and Delete sheet for tabs (sheet names)
     if (role === 'tabs') {
         // Rename sheet
         items.push({
-            title: jSuites.translate('Rename sheet'),
+            title: jSuites.translate('Rename this sheet'),
             onclick: function () {
                 const spreadsheet = worksheet.parent;
                 const sheetIndex = typeof x === 'number' ? x : null;
@@ -989,7 +978,7 @@ const defaultContextMenu = function(worksheet, x, y, role) {
         });
         // Delete sheet
         items.push({
-            title: jSuites.translate('Delete sheet'),
+            title: jSuites.translate('Delete this sheet'),
             onclick: function () {
                 const spreadsheet = worksheet.parent;
                 const sheetIndex = typeof x === 'number' ? x : null;
@@ -1001,6 +990,17 @@ const defaultContextMenu = function(worksheet, x, y, role) {
                 } else if (spreadsheet.worksheets.length === 1) {
                     alert(jSuites.translate('At least one sheet must remain.'));
                 }
+            }
+        });
+    }
+
+    // Save
+    if (worksheet.parent.config.allowExport != false) {
+        items.push({
+            title: jSuites.translate('Save as') + '...',
+            shortcut: 'Ctrl + S',
+            onclick: function () {
+                worksheet.download();
             }
         });
     }
