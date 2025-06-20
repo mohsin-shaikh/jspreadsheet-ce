@@ -966,8 +966,28 @@ const defaultContextMenu = function(worksheet, x, y, role) {
         });
     }
 
-    // Add Delete sheet for tabs (sheet names)
+    // Add Rename and Delete sheet for tabs (sheet names)
     if (role === 'tabs') {
+        // Rename sheet
+        items.push({
+            title: jSuites.translate('Rename sheet'),
+            onclick: function () {
+                const spreadsheet = worksheet.parent;
+                const sheetIndex = typeof x === 'number' ? x : null;
+                if (sheetIndex !== null) {
+                    const currentName = spreadsheet.worksheets[sheetIndex].options.worksheetName;
+                    const newName = prompt(jSuites.translate('Sheet name'), currentName);
+                    if (newName && newName !== currentName) {
+                        spreadsheet.worksheets[sheetIndex].options.worksheetName = newName;
+                        // Update tab title in the UI
+                        if (spreadsheet.element && spreadsheet.element.tabs && spreadsheet.element.tabs.headers) {
+                            spreadsheet.element.tabs.headers.children[sheetIndex].innerText = newName;
+                        }
+                    }
+                }
+            }
+        });
+        // Delete sheet
         items.push({
             title: jSuites.translate('Delete sheet'),
             onclick: function () {
