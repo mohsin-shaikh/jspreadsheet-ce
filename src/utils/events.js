@@ -966,6 +966,25 @@ const defaultContextMenu = function(worksheet, x, y, role) {
         });
     }
 
+    // Add Delete sheet for tabs (sheet names)
+    if (role === 'tabs') {
+        items.push({
+            title: jSuites.translate('Delete sheet'),
+            onclick: function () {
+                const spreadsheet = worksheet.parent;
+                const sheetIndex = typeof x === 'number' ? x : null;
+                if (sheetIndex !== null && spreadsheet.worksheets.length > 1) {
+                    const sheetName = spreadsheet.worksheets[sheetIndex].options.worksheetName;
+                    if (confirm(jSuites.translate('Are you sure you want to delete the sheet: ') + sheetName + '?')) {
+                        spreadsheet.worksheets[sheetIndex].deleteWorksheet(sheetIndex);
+                    }
+                } else if (spreadsheet.worksheets.length === 1) {
+                    alert(jSuites.translate('At least one sheet must remain.'));
+                }
+            }
+        });
+    }
+
     // About
     if (worksheet.parent.config.about != false) {
         items.push({
