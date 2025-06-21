@@ -11,12 +11,29 @@ window.instance = jspreadsheet(root, {
     worksheets: [{
         minDimensions: [10, 10],
         columns: [
-            { type: 'dropdown', source: ['Male', 'Female'] }
+            { type: 'text' },
+            {
+                type: 'dropdown',
+                source: [
+                    { value: 'Male', text: 'Male' },
+                    { value: 'Female', text: 'Female' },
+                    { value: "Canada", text: "Canada" },
+                    { value: "United Kingdom", text: "United Kingdom" },
+                    { value: "India", text: "India" },
+                    { value: "Australia", text: "Australia" },
+                    { value: "Germany", text: "Germany" },
+                ],
+                autocomplete: true,
+            }
         ],
-        // Not working
-        // cells: {
-        //     A1: { type: 'dropdown', source: ['Male', 'Female'] }
-        // },
+        cells: {
+            A1: { type:'html' },
+            B2: { type:'number', mask: '#.##0,00' },
+            B6: { type: 'dropdown', source: [12,24,36,48,60] },
+            C3: { type: 'checkbox' },
+            D4: { type: 'calendar', options: { format: 'YYYY-MM-DD' } },
+            E5: { type: 'dropdown', source: ['Option 1', 'Option 2', 'Option 3'] },
+        },
     }],
 })
 
