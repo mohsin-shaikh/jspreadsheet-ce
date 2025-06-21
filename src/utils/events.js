@@ -955,6 +955,45 @@ const defaultContextMenu = function(worksheet, x, y, role) {
         }
     }
 
+    // Add Rename and Delete sheet for tabs (sheet names)
+    if (role === 'tabs') {
+        // Rename sheet
+        items.push({
+            title: jSuites.translate('Rename this sheet'),
+            onclick: function () {
+                const spreadsheet = worksheet.parent;
+                const sheetIndex = typeof x === 'number' ? x : null;
+                if (sheetIndex !== null) {
+                    const currentName = spreadsheet.worksheets[sheetIndex].options.worksheetName;
+                    const newName = prompt(jSuites.translate('Sheet name'), currentName);
+                    if (newName && newName !== currentName) {
+                        spreadsheet.worksheets[sheetIndex].options.worksheetName = newName;
+                        // Update tab title in the UI
+                        if (spreadsheet.element && spreadsheet.element.tabs && spreadsheet.element.tabs.headers) {
+                            spreadsheet.element.tabs.headers.children[sheetIndex].innerText = newName;
+                        }
+                    }
+                }
+            }
+        });
+        // Delete sheet
+        items.push({
+            title: jSuites.translate('Delete this sheet'),
+            onclick: function () {
+                const spreadsheet = worksheet.parent;
+                const sheetIndex = typeof x === 'number' ? x : null;
+                if (sheetIndex !== null && spreadsheet.worksheets.length > 1) {
+                    const sheetName = spreadsheet.worksheets[sheetIndex].options.worksheetName;
+                    if (confirm(jSuites.translate('Are you sure you want to delete the sheet: ') + sheetName + '?')) {
+                        spreadsheet.worksheets[sheetIndex].deleteWorksheet(sheetIndex);
+                    }
+                } else if (spreadsheet.worksheets.length === 1) {
+                    alert(jSuites.translate('At least one sheet must remain.'));
+                }
+            }
+        });
+    }
+
     // Save
     if (worksheet.parent.config.allowExport != false) {
         items.push({
